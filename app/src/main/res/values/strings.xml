@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Agenda</string>
+    <string name="action_settings" tools:keep="@string/action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="nome">Nome</string>
+    <string name="telefone">Telefone Celular</string>
+    <string name="e_mail">E-mail</string>
+    <string name="salvar_o_aluno">Salvar o Aluno</string>
+    <string name="remover" tools:keep="@string/remover">Remover</string>
+    <string name="botao_adicionar_aluno">Botão adicionar aluno</string>
+    <string name="telefone_fixo">Telefone Fixo</string>
+</resources>

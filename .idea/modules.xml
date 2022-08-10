@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ListaAlunos.iml" filepath="$PROJECT_DIR$/.idea/modules/ListaAlunos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ListaAlunos.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ListaAlunos.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ListaAlunos.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ListaAlunos.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ListaAlunos.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ListaAlunos.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ListaAlunos.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ListaAlunos.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/ListaAlunos.lib.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/ListaAlunos.lib.iml" />
+    </modules>
+  </component>
+</project>
