@@ -21,8 +21,8 @@ class FormularioAlunoActivity : AppCompatActivity() {
     private val TITULO_APPBAR_NOVO_ALUNO: String = "Novo Aluno"
     private val TITULO_APPBAR_EDITA_ALUNO: String = "Edita Aluno"
     private lateinit var campoNome: EditText
-    private lateinit var campoTelefoneFixo: EditText
-    private lateinit var campoTelefoneCelular: EditText
+//    private lateinit var campoTelefoneFixo: EditText
+//    private lateinit var campoTelefoneCelular: EditText
     private lateinit var campoTelefone: EditText
     private lateinit var campoEmail: EditText
     private lateinit var alunoDAO: AlunoDAO
@@ -107,7 +107,7 @@ class FormularioAlunoActivity : AppCompatActivity() {
 //        for (telefone: Telefone in telefoneDoAluno) {
 //            if (telefone.tipo === TipoTelefone.FIXO) {
 //                telefoneFixo.id
-//            } else {
+//            } 2else {
 //                telefoneCelular.id
 //            }
 //        }
@@ -145,13 +145,13 @@ class FormularioAlunoActivity : AppCompatActivity() {
 
 
     private fun preencheAluno(): Aluno {
-        val nome: String = campoNome.text.toString()
+//        val nome: String = campoNome.text.toString()
 //        val telefone: String = campoTelefoneCelular.text.toString()
 //        val telefoneFixo: String = campoTelefoneFixo.text.toString()
-        val telefone: String = campoTelefone.text.toString()
-        val email: String = campoEmail.text.toString()
+//        val telefone: String = campoTelefone.text.toString()
+//        val email: String = campoEmail.text.toString()
 
-        return Aluno( nome, telefone, email)
+        return Aluno(campoNome.text.toString(), campoTelefone.text.toString(), campoEmail.text.toString())
     }
 }
 

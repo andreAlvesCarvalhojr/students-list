@@ -20,7 +20,7 @@ abstract class AgendaDatabase : RoomDatabase() {
 
     companion object {
         fun mInstance(context: Context): AgendaDatabase {
-            return Room.databaseBuilder(context, AgendaDatabase::class.java, "agenda.db")
+            return Room.databaseBuilder(context.applicationContext, AgendaDatabase::class.java, "agenda.db")
                 .addMigrations(object : Migration(1, 2) {
                     override fun migrate(database: SupportSQLiteDatabase) {
                         database.execSQL("ALTER TABLE Aluno ADD COLUMN sobrenome TEXT")

@@ -3,11 +3,15 @@ package com.example.listaalunos.ui
 import android.content.Context
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.listaalunos.asynctask.RemoveAlunoTask
 import com.example.listaalunos.database.AgendaDatabase
 import com.example.listaalunos.database.dao.AlunoDAO
 import com.example.listaalunos.model.Aluno
 import com.example.listaalunos.ui.adapter.ListaAlunosAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 class AlunoItemTouchHelperCallback(private val adapter: ListaAlunosAdapter, val context: Context) :
     ItemTouchHelper.Callback() {
@@ -29,15 +33,17 @@ class AlunoItemTouchHelperCallback(private val adapter: ListaAlunosAdapter, val 
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        val posicaoInicial = viewHolder.adapterPosition
-        val posicaoFinal = target.adapterPosition
-        trocaNotas(posicaoInicial, posicaoFinal)
-        return true
-    }
-
-    private fun trocaNotas(posicaoInicial: Int, posicaoFinal: Int) {
-        dao.troca(posicaoInicial, posicaoFinal)
-        adapter.troca(posicaoInicial, posicaoFinal)
+//        val posicaoInicial = viewHolder.adapterPosition
+//        val posicaoFinal = target.adapterPosition
+//        trocaNotas(posicaoInicial, posicaoFinal)
+//        return true
+//    }
+//
+//    private fun trocaNotas(posicaoInicial: Int, posicaoFinal: Int) {
+//        dao.troca(posicaoInicial, posicaoFinal)
+//        adapter.troca(posicaoInicial, posicaoFinal)
+//    }
+        TODO()
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -47,10 +53,15 @@ class AlunoItemTouchHelperCallback(private val adapter: ListaAlunosAdapter, val 
 
     private fun removeAluno(posicao: Int) {
         val alunoEscolhido: Aluno = adapter.getItem(posicao)
-        RemoveAlunoTask(alunoEscolhido, dao) {
-            adapter.remove(alunoEscolhido)
+//        RemoveAlunoTask(alunoEscolhido, dao) {
+//            adapter.remove(alunoEscolhido)
+//        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            dao.remove(alunoEscolhido)
+            withContext(Dispatchers.Main) {
+                adapter.remove(alunoEscolhido)
+            }
         }
-//        dao.remove(alunoEscolhido)
-//        adapter.remove(alunoEscolhido)
     }
 }

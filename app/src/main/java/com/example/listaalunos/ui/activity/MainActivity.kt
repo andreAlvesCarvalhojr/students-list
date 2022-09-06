@@ -3,15 +3,14 @@ package com.example.listaalunos.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.listaalunos.R
-import com.example.listaalunos.asynctask.BuscaAlunoTask
-import com.example.listaalunos.asynctask.EditaAlunoTask
-import com.example.listaalunos.asynctask.SalvaAlunoTask
 import com.example.listaalunos.database.AgendaDatabase
+import com.example.listaalunos.database.dao.AlunoDAO
+import com.example.listaalunos.database.dao.Repository
 import com.example.listaalunos.model.Aluno
 import com.example.listaalunos.ui.AlunoItemTouchHelperCallback
 import com.example.listaalunos.ui.activity.ConstantesActivity.CHAVE_ALUNO
@@ -25,17 +24,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
-    //    private lateinit var dao: AlunoDAO
     private val TITULO_APPBAR: String = "Lista de Aluno"
     private lateinit var listaAlunosView: RecyclerView
     private lateinit var botaoNovoAluno: FloatingActionButton
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-
-    private val dao by lazy {
-        AgendaDatabase
-            .mInstance(this)
-            .getRoomAlunoDao()
-    }
+    private lateinit var dao: AlunoDAO
+    private lateinit var mainViewModel: MainViewModel
 
     private val adapter by lazy {
         ListaAlunosAdapter(this)
@@ -49,50 +42,30 @@ class MainActivity : AppCompatActivity() {
         configuraRecycleView()
         configuraFabNovoAluno()
 
-//        activityResultLauncher =
-//            ComponentActivity().registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//                if (resultadoInsereAluno(result)) {
-//
-//                    if (result.resultCode == Activity.RESULT_OK) {
-//                        val alunoRecebido: Aluno =
-//                            result.data!!.getSerializableExtra(CHAVE_ALUNO) as Aluno
-//                        adiciona(alunoRecebido)
-//                    }
-//                }
-//            }
+        val db: AgendaDatabase = AgendaDatabase.mInstance(this)
+        dao = db.getRoomAlunoDao()
 
-//        activityResultLauncher =
-//            ComponentActivity().registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//                if (resultadoAlteraAluno(result)) {
-//                    if (result.resultCode == Activity.RESULT_OK) {
-//                        val alunoRecebido: Aluno =
-//                            result.data!!.getSerializableExtra(CHAVE_ALUNO) as Aluno
-//                        val posicaoRecebida: Int =
-//                            result.data!!.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA)
-//                        if (posicaoRecebida > POSICAO_INVALIDA) {
-//                            edita(alunoRecebido, posicaoRecebida)
-//                        }
-//                    }
-//                }
-//            }
-
-
-//        dao = AgendaDatabase.mInstance(this)
-//            .getRoomAlunoDao()
-
-//        listaAlunosView = ListaAlunoView(this)
-//        val todosAlunos: List<Aluno>? = finalizaFormulario()
+        mainViewModel = ViewModelProvider(
+            this,
+            MainViewModel.MainViewModelFactory(Repository(this))
+        )[MainViewModel::class.java]
     }
 
-//    private fun resultadoAlteraAluno(result: ActivityResult) =
-//        result.resultCode == REQUISICAO_ALTERA_ALUNO && temAluno(result)
-//
-//    private fun resultadoInsereAluno(result: ActivityResult) =
-//        result.resultCode == REQUISICAO_INSERE_ALUNO && temAluno(result)
-//
-//    private fun temAluno(result: ActivityResult) =
-//        result.data!!.hasExtra(CHAVE_ALUNO)
+    private fun obsNewAluno() {
+        mainViewModel.alunoLiveData.observe(this) {
+            it?.let {
+                adapter.atualiza(it)
+            }
+        }
+    }
 
+    private fun obsEditAluno(pos: Int) {
+        mainViewModel.mAluno.observe(this) {
+            it?.let {
+                adapter.edita(it, pos)
+            }
+        }
+    }
 
     private fun initViews() {
         listaAlunosView = findViewById(R.id.activity_lista_alunos_recycleView)
@@ -105,7 +78,8 @@ class MainActivity : AppCompatActivity() {
 
             if (resultCode == Activity.RESULT_OK) {
                 val alunoRecebido = data!!.getSerializableExtra(CHAVE_ALUNO) as Aluno
-                adiciona(alunoRecebido)
+                mainViewModel.salva(alunoRecebido)
+                obsNewAluno()
             }
         }
         if (resultadoAlteraAluno(requestCode, data)) {
@@ -113,11 +87,10 @@ class MainActivity : AppCompatActivity() {
                 if (data != null) {
                     val alunoRecebido: Aluno = data.getSerializableExtra(CHAVE_ALUNO) as Aluno
                     val posicaoRecebida: Int = data.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA)
+                    obsEditAluno(posicaoRecebida)
                     if (posicaoRecebida > POSICAO_INVALIDA) {
-                        edita(
-                            alunoRecebido,
-                            posicaoRecebida,
-                        )
+                        mainViewModel.edita(alunoRecebido)
+//                        edita(alunoRecebido, posicaoRecebida)
                     }
                 }
             }
@@ -133,7 +106,6 @@ class MainActivity : AppCompatActivity() {
     private fun temAluno(data: Intent?): Boolean {
         return (data != null) && data.hasExtra(CHAVE_ALUNO)
     }
-
 
     private fun configuraFabNovoAluno() {
         botaoNovoAluno.setOnClickListener {
@@ -172,34 +144,39 @@ class MainActivity : AppCompatActivity() {
             Intent(this@MainActivity, FormularioAlunoActivity::class.java)
         vaiParaFormularioActivity.putExtra(CHAVE_ALUNO, aluno)
         vaiParaFormularioActivity.putExtra(CHAVE_POSICAO, posicao)
-        startActivityForResult(vaiParaFormularioActivity, 2)
+        startActivityForResult(vaiParaFormularioActivity, REQUISICAO_ALTERA_ALUNO)
     }
 
     override fun onResume() {
         super.onResume()
-        atualiza()
+        mainViewModel.todos()
+        obsNewAluno()
     }
 
-    private fun atualiza() {
-        BuscaAlunoTask(dao) { aluno ->
-            adapter.atualiza(aluno)
-        }.execute()
-//        adapter.atualiza(dao.todos())
-    }
 
-    private fun adiciona(aluno: Aluno) {
-        SalvaAlunoTask(aluno, dao) {
-            adapter.adiciona(aluno)
-        }.execute()
-//        dao.salva(aluno)
-//        adapter.adiciona(aluno)
-    }
-
-    private fun edita(aluno: Aluno, posicao: Int) {
-        EditaAlunoTask(aluno, dao) {
-            adapter.edita(aluno, posicao)
-        }.execute()
-//        dao.edita(aluno)
-//        adapter.edita(aluno, posicao)
-    }
+    //AsyncTask
+//    private fun atualiza() {
+//        Thread {
+//            kotlin.run {
+//                lifecycleScope.launch {
+//                    val alunos = dao.todos()
+//                    withContext(Dispatchers.Main) {
+//                        adapter.atualiza(alunos)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun adiciona(aluno: Aluno) {
+//        SalvaAlunoTask(aluno, dao) {
+//            adapter.adiciona(aluno)
+//        }.execute()
+//    }
+//
+//    private fun edita(aluno: Aluno, posicao: Int) {
+//        EditaAlunoTask(aluno, dao) {
+//            adapter.edita(aluno, posicao)
+//        }.execute()
+//    }
 }

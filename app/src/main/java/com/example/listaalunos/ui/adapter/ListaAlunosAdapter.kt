@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.listaalunos.R
 import com.example.listaalunos.model.Aluno
 import com.example.listaalunos.ui.adapter.listener.OnItemClickListener
-import java.util.*
 
 class ListaAlunosAdapter(
     private var context: Context
@@ -79,10 +78,10 @@ class ListaAlunosAdapter(
 
     fun getItem(position: Int) = this.aluno[position]
 
-    fun adiciona(alunos: Aluno) {
-        aluno.add(alunos)
-        notifyDataSetChanged()
-    }
+//    fun adiciona(alunos: Aluno) {
+//        this.aluno.add(alunos)
+//        notifyDataSetChanged()
+//    }
 
     fun edita(aluno: Aluno, posicao: Int) {
         this.aluno[posicao] = aluno
@@ -95,14 +94,15 @@ class ListaAlunosAdapter(
     }
 
     fun atualiza(alunos: List<Aluno>) {
-        aluno.clear()
-        aluno.addAll(alunos)
+        this.aluno.clear()
+        this.aluno.addAll(alunos)
         notifyDataSetChanged()
+
     }
 
-    fun troca(posicaoInicial: Int, posicaoFinal: Int) {
-        Collections.swap(aluno, posicaoInicial, posicaoFinal)
-        notifyItemMoved(posicaoInicial, posicaoFinal)
-    }
+//    fun troca(posicaoInicial: Int, posicaoFinal: Int) {
+//        Collections.swap(aluno, posicaoInicial, posicaoFinal)
+//        notifyItemMoved(posicaoInicial, posicaoFinal)
+//    }
 
 }

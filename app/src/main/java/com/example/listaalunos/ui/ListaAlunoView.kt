@@ -1,18 +1,14 @@
 package com.example.listaalunos.ui
 
-import android.content.Context
-import android.widget.AdapterView.AdapterContextMenuInfo
-import com.example.listaalunos.database.AgendaDatabase
 
+//class ListaAlunoView(var context: Context) {
 
-class ListaAlunoView(var context: Context) {
-
-    private lateinit var mItem: AdapterContextMenuInfo
+//    private lateinit var mItem: AdapterContextMenuInfo
 
 //    private var adapter: ListaAlunosAdapter = ListaAlunosAdapter(AlunoDAO.todos(), context)
 
-    private val dao: com.example.listaalunos.database.dao.AlunoDAO = AgendaDatabase.mInstance(context)
-        .getRoomAlunoDao()
+//    private val dao: com.example.listaalunos.database.dao.AlunoDAO = AgendaDatabase.mInstance(context)
+//        .getRoomAlunoDao()
 
 //    var positiveButtonClick = { dialog: DialogInterface, which: Int ->
 //        Toast.makeText(context, "YES", Toast.LENGTH_SHORT).show()
@@ -33,7 +29,7 @@ class ListaAlunoView(var context: Context) {
 //            .setMessage("Tem certeza que quer remover aluno?")
 //            .setPositiveButton("Sim") { _, _ ->
 //                //ERROR - Item.menuInfo retornando null
-//                val menuItem: AdapterView.AdapterContextMenuInfo= item.menuInfo as AdapterView.AdapterContextMenuInfo
+//                val menuItem: AdapterView.AdapterContextMenuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
 //                    val alunoEscolhido: Aluno =
 //                        adapter.getItem(menuItem.position)
 //                    remove(alunoEscolhido)
@@ -83,4 +79,4 @@ class ListaAlunoView(var context: Context) {
 //    fun atualizaAlunos() {
 //        adapter.atualiza(dao.todos())
 //    }
-}
+//}

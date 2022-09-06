@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
-import java.text.DateFormat.getDateInstance
 import java.util.*
 
 @Entity
@@ -46,10 +45,10 @@ class Aluno(val nome: String,
     }
 
     // Implementa data
-    private fun dataFormatada(): String {
-        val formatador = getDateInstance()
-        return formatador.format(momentoDeCadastro.time)
-    }
+//    private fun dataFormatada(): String {
+//        val formatador = getDateInstance()
+//        return formatador.format(momentoDeCadastro.time)
+//    }
 
 }
 

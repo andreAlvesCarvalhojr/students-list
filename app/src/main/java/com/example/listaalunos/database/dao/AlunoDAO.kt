@@ -5,20 +5,19 @@ import com.example.listaalunos.model.Aluno
 
 @Dao
 interface AlunoDAO {
-    @Insert
-    fun salva(aluno: Aluno): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun salva(aluno: Aluno): Long
 
     @Delete
-    fun remove(aluno: Aluno)
+    suspend fun remove(aluno: Aluno)
 
     @Query("SELECT * FROM aluno")
-    fun todos(): List<Aluno>
+    suspend fun todos(): List<Aluno>
 
-    @Update
-    fun edita(aluno: Aluno)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun edita(aluno: Aluno)
 
-    @Update
-    fun troca(posicaoInicial: Int, posicaoFinal: Int) {
-        TODO("Not yet implemented")
-    }
+//    @Update
+//    fun troca(posicaoInicial: Int, posicaoFinal: Int)
 }
